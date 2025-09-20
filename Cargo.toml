@@ -1,0 +1,59 @@
+[package]
+name = "ariel-os-wireguard-example"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ariel-os = { path = "build/imports/ariel-os/src/ariel-os", features = ["net", "udp", "random", "wifi-esp", "hwrng", "csprng"] }
+ariel-os-boards = { path = "build/imports/ariel-os/src/ariel-os-boards" }
+boringtun = { git = "https://github.com/SimonIT/boringtun.git", branch = "no_std", default-features = false, features = ["ariel-os", "alloc"] }
+ariel-os-wireguard = { git = "https://github.com/SimonIT/ariel-os-wireguard.git" }
+base64 = { version = "0.22.1", default-features = false }
+rand_core = "0.9.3"
+
+[profile.dev]
+incremental = false
+codegen-units = 1
+debug = true
+lto = false
+opt-level = "s"     # Optimize for size even in debug builds
+
+[profile.release]
+incremental = false
+codegen-units = 1
+debug = true        # Required for defmt
+lto = false
+opt-level = "s"
+
+[profile.release.package.esp-wifi]
+opt-level = 3
+
+[patch.crates-io]
+# ariel-os embassy forks
+embassy-embedded-hal = { git = "https://github.com/ariel-os/embassy", branch = "embassy-embedded-hal-v0.3.0+ariel-os" }
+embassy-executor = { git = "https://github.com/ariel-os/embassy", branch = "embassy-executor-v0.7.0+04.04.25+ariel-os" }
+embassy-executor-macros = { git = "https://github.com/ariel-os/embassy", branch = "embassy-executor-macros-v0.6.2+04.04.25" }
+embassy-hal-internal = { git = "https://github.com/ariel-os/embassy", branch = "embassy-hal-internal-v0.2.0+ariel-os" }
+embassy-nrf = { git = "https://github.com/ariel-os/embassy", branch = "embassy-nrf-v0.3.1+ariel-os" }
+embassy-net = { git = "https://github.com/ariel-os/embassy", branch = "embassy-net-v0.6.0+ariel-os" }
+embassy-rp = { git = "https://github.com/ariel-os/embassy", branch = "embassy-rp-v0.4.0+ariel-os" }
+embassy-stm32 = { git = "https://github.com/ariel-os/embassy", branch = "embassy-stm32-v0.2.0+ariel-os" }
+
+# ariel-os esp-hal fork
+esp-alloc = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+esp-hal = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+esp-hal-embassy = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+esp-println = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+esp-wifi = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+esp-storage = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+xtensa-lx-rt = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
+
+# patched to use portable-atomics <https://github.com/seanmonstar/try-lock/pull/11>
+try-lock = { git = "https://github.com/seanmonstar/try-lock", rev = "a1aadfac9840fe23672159c12af7272e44bc684c" }
+
+#boringtun
+ip_network = { git = "https://github.com/SimonIT/ip_network.git", branch = "no_std" }
+ip_network_table = { git = "https://github.com/SimonIT/ip_network_table.git", branch = "no_std" }
+ip_network_table-deps-treebitmap = { git = "https://github.com/SimonIT/treebitmap.git", branch = "fix-alloc" }
+getrandom = { git = "https://github.com/SimonIT/getrandom.git", branch = "ariel-os" }
+ring = { git = "https://github.com/SimonIT/ring.git", branch = "ariel-os" }

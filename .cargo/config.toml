@@ -1,0 +1,11 @@
+include = "../build/imports/ariel-os/ariel-os-cargo.toml"
+
+[unstable]
+# This is needed so the "include" statement above works.
+config-include = true
+
+[target.thumbv7em-none-eabi]
+rustflags = ['--cfg', 'getrandom_backend="ariel-os"']
+
+[target.riscv32imac-unknown-none-elf]
+rustflags = ['--cfg', 'getrandom_backend="ariel-os"']
