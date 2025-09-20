@@ -9,7 +9,7 @@ ariel-os-boards = { path = "build/imports/ariel-os/src/ariel-os-boards" }
 boringtun = { git = "https://github.com/SimonIT/boringtun.git", branch = "no_std", default-features = false, features = ["ariel-os", "alloc"] }
 ariel-os-wireguard = { git = "https://github.com/SimonIT/ariel-os-wireguard.git" }
 base64 = { version = "0.22.1", default-features = false }
-rand_core = "0.9.3"
+rand_core = "0.6.4"
 
 [profile.dev]
 incremental = false

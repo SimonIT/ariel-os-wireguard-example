@@ -32,9 +32,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.99"
+version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
+checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
 
 [[package]]
 name = "ariel-os"
@@ -394,7 +394,7 @@ dependencies = [
  "ariel-os-wireguard",
  "base64 0.22.1",
  "boringtun",
- "rand_core 0.9.3",
+ "rand_core 0.6.4",
 ]
 
 [[package]]
@@ -556,7 +556,7 @@ dependencies = [
 [[package]]
 name = "boringtun"
 version = "0.6.0"
-source = "git+https://github.com/SimonIT/boringtun.git?branch=no_std#6d0a45b22661b1718c2f471dfb38ae188197058d"
+source = "git+https://github.com/SimonIT/boringtun.git?branch=no_std#4122f81c540fb650bb579ee9b3b243a23995d161"
 dependencies = [
  "aead",
  "ariel-os-lock",
