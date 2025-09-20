@@ -20,11 +20,15 @@ async fn net_task(
 #[embassy_executor::task]
 async fn wireguard_task(stack: Stack<'static>, mut runner: Runner<'static>) -> ! {
     let config = Config {
-        private_key: StaticSecret::from(()),
-        endpoint_public_key: PublicKey::from(()),
+        private_key: StaticSecret::from(data_encoding_macro::base64!(
+            "c3RhdGlvbm1hcmt0YXN0ZWNodXJjaHN0ZXB6ZWJyYXM="
+        )),
+        endpoint_public_key: PublicKey::from(data_encoding_macro::base64!(
+            "c3RhdGlvbm1hcmt0YXN0ZWNodXJjaHN0ZXB6ZWJyYXM="
+        )),
         preshared_key: None,
-        endpoint_addr: SocketAddr::from([]),
-        endpoint_bind_addr: SocketAddr::from(1234),
+        endpoint_addr: SocketAddr::from(([192, 168, 0, 34], 51820)),
+        endpoint_bind_addr: SocketAddr::from(([127, 0, 0, 1], 1234)),
         keepalive_seconds: None,
     };
 
@@ -56,6 +60,6 @@ async fn main_task() {
         seed,
     );
 
-    spawner.spawn(net_task(net_runner).unwrap());
-    spawner.spawn(wireguard_task(stack, runner).unwrap());
+    spawner.spawn(net_task(net_runner)).unwrap();
+    spawner.spawn(wireguard_task(stack, runner)).unwrap();
 }
