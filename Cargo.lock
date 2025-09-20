@@ -128,9 +128,9 @@ dependencies = [
  "embassy-executor",
  "embassy-futures",
  "embassy-hal-internal",
- "embassy-net 0.6.0",
+ "embassy-net",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
  "heapless",
@@ -149,7 +149,7 @@ dependencies = [
  "ariel-os-utils 0.2.0",
  "const-sha1",
  "embassy-futures",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
 ]
@@ -165,7 +165,7 @@ dependencies = [
  "ariel-os-utils 0.2.0",
  "cfg-if",
  "embassy-executor",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
  "esp-alloc",
@@ -375,13 +375,13 @@ dependencies = [
 [[package]]
 name = "ariel-os-wireguard"
 version = "0.1.0"
-source = "git+https://github.com/SimonIT/ariel-os-wireguard.git#6bd6fa527d9c156dbe987be060cb5b5e3c6a7d8a"
+source = "git+https://github.com/SimonIT/ariel-os-wireguard.git#f8f719819540fdbd9251c61f676608b849ebb7d1"
 dependencies = [
  "boringtun",
  "embassy-futures",
- "embassy-net 0.7.1",
+ "embassy-net",
  "embassy-net-driver-channel",
- "embassy-time 0.5.0",
+ "embassy-time",
  "smoltcp",
 ]
 
@@ -394,6 +394,7 @@ dependencies = [
  "ariel-os-wireguard",
  "base64 0.22.1",
  "boringtun",
+ "embassy-executor",
  "rand_core 0.6.4",
 ]
 
@@ -940,7 +941,7 @@ source = "git+https://github.com/ariel-os/embassy?branch=embassy-embedded-hal-v0
 dependencies = [
  "embassy-futures",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
  "embedded-storage",
@@ -953,7 +954,7 @@ name = "embassy-embedded-time"
 version = "0.1.0"
 source = "git+https://github.com/SimonIT/embassy-embedded-time.git?branch=release%2Fv0.13.0#d3d6c77eb54c3dcd1b38e396801fe33106141c9e"
 dependencies = [
- "embassy-time 0.4.0",
+ "embassy-time",
  "embedded-time",
 ]
 
@@ -1003,24 +1004,7 @@ dependencies = [
  "document-features",
  "embassy-net-driver",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
- "embedded-io-async",
- "embedded-nal-async",
- "heapless",
- "managed",
- "smoltcp",
-]
-
-[[package]]
-name = "embassy-net"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0558a231a47e7d4a06a28b5278c92e860f1200f24821d2f365a2f40fe3f3c7b2"
-dependencies = [
- "document-features",
- "embassy-net-driver",
- "embassy-sync 0.7.2",
- "embassy-time 0.5.0",
+ "embassy-time",
  "embedded-io-async",
  "embedded-nal-async",
  "heapless",
@@ -1059,7 +1043,7 @@ dependencies = [
  "embassy-embedded-hal",
  "embassy-hal-internal",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embassy-time-driver",
  "embassy-time-queue-utils",
  "embassy-usb-driver",
@@ -1091,7 +1075,7 @@ dependencies = [
  "embassy-futures",
  "embassy-hal-internal",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embassy-time-driver",
  "embassy-time-queue-utils",
  "embassy-usb-driver",
@@ -1134,7 +1118,7 @@ dependencies = [
  "embassy-hal-internal",
  "embassy-net-driver",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embassy-time-driver",
  "embassy-time-queue-utils",
  "embassy-usb-driver",
@@ -1204,22 +1188,6 @@ dependencies = [
  "embedded-hal 1.0.0",
  "embedded-hal-async",
  "futures-util",
-]
-
-[[package]]
-name = "embassy-time"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4fa65b9284d974dad7a23bb72835c4ec85c0b540d86af7fc4098c88cff51d65"
-dependencies = [
- "cfg-if",
- "critical-section",
- "document-features",
- "embassy-time-driver",
- "embedded-hal 0.2.7",
- "embedded-hal 1.0.0",
- "embedded-hal-async",
- "futures-core",
 ]
 
 [[package]]
@@ -1545,7 +1513,7 @@ dependencies = [
  "critical-section",
  "document-features",
  "embassy-sync 0.6.2",
- "embassy-time 0.4.0",
+ "embassy-time",
  "embassy-time-driver",
  "embassy-time-queue-utils",
  "esp-build",
