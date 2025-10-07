@@ -9,6 +9,7 @@ use ariel_os::{asynch, net};
 use ariel_os_wireguard::{Config, Runner};
 use boringtun::x25519::{PublicKey, StaticSecret};
 use core::net::SocketAddr;
+use data_encoding_macro::base64;
 
 #[embassy_executor::task]
 async fn net_task(
@@ -20,11 +21,11 @@ async fn net_task(
 #[embassy_executor::task]
 async fn wireguard_task(stack: Stack<'static>, mut runner: Runner<'static>) -> ! {
     let config = Config {
-        private_key: StaticSecret::from(data_encoding_macro::base64!(
-            "c3RhdGlvbm1hcmt0YXN0ZWNodXJjaHN0ZXB6ZWJyYXM="
+        private_key: StaticSecret::from(base64!(
+            "eLF/Dh4lfnu9eaEtNhAu3x0ItQZ18ZmU3HJ9fxiBiEQ="
         )),
-        endpoint_public_key: PublicKey::from(data_encoding_macro::base64!(
-            "c3RhdGlvbm1hcmt0YXN0ZWNodXJjaHN0ZXB6ZWJyYXM="
+        endpoint_public_key: PublicKey::from(base64!(
+            "WDEkYLmPsNoXG83PTKk6GYxv+Q8IEVbGsQxUdrBiGHA="
         )),
         preshared_key: None,
         endpoint_addr: SocketAddr::from(([192, 168, 0, 34], 51820)),
