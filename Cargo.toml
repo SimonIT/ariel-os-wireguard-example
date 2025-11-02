@@ -4,13 +4,17 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ariel-os = { path = "build/imports/ariel-os/src/ariel-os", features = ["net", "udp", "random", "wifi-esp", "hwrng", "csprng"] }
+ariel-os = { path = "build/imports/ariel-os/src/ariel-os", features = ["net", "random", "hwrng", "csprng", "tcp", "dns"] }
 ariel-os-boards = { path = "build/imports/ariel-os/src/ariel-os-boards" }
-boringtun = { git = "https://github.com/SimonIT/boringtun.git", branch = "no_std", default-features = false, features = ["ariel-os", "alloc"] }
-ariel-os-wireguard = { git = "https://github.com/SimonIT/ariel-os-wireguard.git" }
+boringtun = { git = "https://github.com/SimonIT/boringtun.git", branch = "no_std", default-features = false, features = ["ariel-os", "alloc", "defmt"] }
+ariel-os-wireguard = { git = "https://github.com/SimonIT/ariel-os-wireguard.git", features = ["defmt"] }
 data-encoding-macro = "0.1.18"
 rand_core = "0.6.4"
 embassy-executor = "0.7.0"
+reqwless = { version = "0.13.0", default-features = true, features = [
+    "embedded-tls",
+    "defmt"
+] }
 
 [profile.dev]
 incremental = false
@@ -58,3 +62,9 @@ ip_network_table = { git = "https://github.com/SimonIT/ip_network_table.git", br
 ip_network_table-deps-treebitmap = { git = "https://github.com/SimonIT/treebitmap.git", branch = "fix-alloc" }
 getrandom = { git = "https://github.com/SimonIT/getrandom.git", branch = "ariel-os" }
 ring = { git = "https://github.com/SimonIT/ring.git", branch = "ariel-os" }
+ariel-os-random = { path = "build/imports/ariel-os/src/ariel-os-random" }
+ariel-os-threads = { path = "build/imports/ariel-os/src/ariel-os-threads" }
+embedded-time = { git = "https://github.com/SimonIT/embedded-time.git", branch = "update-defmt" }
+
+[patch."https://github.com/FluenTech/embedded-time.git"]
+embedded-time = { git = "https://github.com/SimonIT/embedded-time.git", branch = "update-defmt" }

@@ -6,6 +6,14 @@ imports:
 
 apps:
   - name: ariel-os-wireguard-example
+    env:
+      global:
+        executor_stacksize_required:
+          - "32768"
     selects:
+      - network
+      - hwrng
       - random
       - alloc
+    conflicts:
+      - ram-small
