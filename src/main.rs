@@ -3,15 +3,16 @@
 
 use ariel_os::cell::StaticCell;
 use ariel_os::debug::log::{debug, error, info};
-use ariel_os::reexports::embassy_net::{Stack, StackResources};
+use ariel_os::debug::{ExitCode, exit};
+use ariel_os::reexports::embassy_net::udp::{PacketMetadata, UdpSocket};
+use ariel_os::reexports::embassy_net::{ConfigV4, Ipv4Cidr, Stack, StackResources, StaticConfigV4};
 use ariel_os::reexports::{embassy_executor, embassy_net};
+use ariel_os::time::Instant;
 use ariel_os::{asynch, config, net};
 use ariel_os_wireguard::{Config, Runner};
-use core::net::SocketAddr;
-use ariel_os::debug::{exit, ExitCode};
-use data_encoding_macro::base64;
-use ariel_os::time::Instant;
 use boringtun::x25519::{PublicKey, StaticSecret};
+use core::net::{Ipv4Addr, SocketAddr};
+use data_encoding_macro::base64;
 use embassy_net::{
     dns::DnsSocket,
     tcp::client::{TcpClient, TcpClientState},
@@ -49,9 +50,7 @@ async fn net_task(
 #[embassy_executor::task]
 async fn wireguard_task(stack: Stack<'static>, mut runner: Runner<'static>) -> ! {
     let config = Config {
-        private_key: StaticSecret::from(base64!(
-            "eLF/Dh4lfnu9eaEtNhAu3x0ItQZ18ZmU3HJ9fxiBiEQ="
-        )),
+        private_key: StaticSecret::from(base64!("eLF/Dh4lfnu9eaEtNhAu3x0ItQZ18ZmU3HJ9fxiBiEQ=")),
         endpoint_public_key: PublicKey::from(base64!(
             "CMlGuaXfUYt4zUbc7++S2rY2B5jwhgUEzQaduzzFwnI="
         )),
@@ -125,8 +124,13 @@ async fn main_task() {
     let mut client = HttpClient::new_with_tls(&tcp_client, &dns_client, tls_config);
 
     wireguard_stack.wait_link_up().await;
-    info!("Wireguard is up");
-    info!("Time: {} µs", Instant::now().as_micros());
+
+    let config = ConfigV4::Static(StaticConfigV4 {
+        address: Ipv4Cidr::new(Ipv4Addr::new(192, 168, 2, 3), 0),
+        gateway: Some(Ipv4Addr::new(0, 0, 0, 0)),
+        dns_servers: stack.config_v4().unwrap().dns_servers,
+    });
+    wireguard_stack.set_config_v4(config);
 
     if let Err(err) = send_http_get_request(&mut client, ENDPOINT_URL).await {
         error!(
