@@ -366,7 +366,7 @@ dependencies = [
 [[package]]
 name = "ariel-os-wireguard"
 version = "0.1.0"
-source = "git+https://github.com/SimonIT/ariel-os-wireguard.git#82a6c44af18cf68abad91b28e9fb7f741ed2abff"
+source = "git+https://github.com/SimonIT/ariel-os-wireguard.git#82c42d47b3ad09d5cf2d459684218fc4c0f7003b"
 dependencies = [
  "boringtun",
  "defmt 1.0.1",
@@ -574,7 +574,7 @@ dependencies = [
 [[package]]
 name = "boringtun"
 version = "0.6.0"
-source = "git+https://github.com/SimonIT/boringtun.git?branch=no_std#0e69eca57fcbddfaff21ea4792e79b90a172895b"
+source = "git+https://github.com/SimonIT/boringtun.git?branch=no_std#275ba15e481c12624e9058307a73855bd3d956d0"
 dependencies = [
  "aead 0.6.0-rc.2",
  "ariel-os-lock",
@@ -645,9 +645,9 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 
 [[package]]
 name = "chacha20"
-version = "0.10.0-rc.2"
+version = "0.10.0-rc.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9bd162f2b8af3e0639d83f28a637e4e55657b7a74508dba5a9bf4da523d5c9e9"
+checksum = "3585020fc6766ef7ff5c58d69819dbca16a19008ae347bb5d3e4e145c495eb38"
 dependencies = [
  "cfg-if",
  "cipher 0.5.0-rc.1",

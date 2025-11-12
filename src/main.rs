@@ -11,7 +11,7 @@ use ariel_os::time::Instant;
 use ariel_os::{asynch, config, net};
 use ariel_os_wireguard::{Config, Runner};
 use boringtun::x25519::{PublicKey, StaticSecret};
-use core::net::{Ipv4Addr, SocketAddr};
+use core::net::{IpAddr, Ipv4Addr, SocketAddr};
 use data_encoding_macro::base64;
 use embassy_net::{
     dns::DnsSocket,
@@ -33,9 +33,11 @@ const HTTP_BUFFER_SIZE: usize = 1024;
 
 const MAX_CONCURRENT_CONNECTIONS: usize = 2;
 
+const WIREGUARD_CLIENT_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 2, 3);
+
 const ENDPOINT_URL: &str = config::str_from_env_or!(
     "ENDPOINT_URL",
-    "https://crab.ariel-os.org",
+    "http://192.168.2.1:8000/",
     "endpoint to send the GET request to",
 );
 
@@ -56,6 +58,7 @@ async fn wireguard_task(stack: Stack<'static>, mut runner: Runner<'static>) -> !
         )),
         preshared_key: None,
         endpoint_addr: SocketAddr::from(([192, 168, 188, 29], 51820)),
+        source_peer_ip: IpAddr::from(WIREGUARD_CLIENT_IP),
         port: 51820,
         keepalive_seconds: None,
     };
@@ -126,7 +129,7 @@ async fn main_task() {
     wireguard_stack.wait_link_up().await;
 
     let config = ConfigV4::Static(StaticConfigV4 {
-        address: Ipv4Cidr::new(Ipv4Addr::new(192, 168, 2, 3), 0),
+        address: Ipv4Cidr::new(WIREGUARD_CLIENT_IP, 32),
         gateway: Some(Ipv4Addr::new(0, 0, 0, 0)),
         dns_servers: stack.config_v4().unwrap().dns_servers,
     });
