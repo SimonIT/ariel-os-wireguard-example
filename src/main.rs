@@ -2,21 +2,19 @@
 #![no_std]
 
 use ariel_os::cell::StaticCell;
-use ariel_os::debug::log::{debug, error, info};
 use ariel_os::debug::{ExitCode, exit};
-use ariel_os::reexports::embassy_net::udp::{PacketMetadata, UdpSocket};
+use ariel_os::log::{error, info};
 use ariel_os::reexports::embassy_net::{ConfigV4, Ipv4Cidr, Stack, StackResources, StaticConfigV4};
 use ariel_os::reexports::{embassy_executor, embassy_net};
-use ariel_os::time::Instant;
 use ariel_os::{asynch, config, net};
-use ariel_os_wireguard::{Config, Runner};
-use boringtun::x25519::{PublicKey, StaticSecret};
 use core::net::{IpAddr, Ipv4Addr, SocketAddr};
 use data_encoding_macro::base64;
 use embassy_net::{
     dns::DnsSocket,
     tcp::client::{TcpClient, TcpClientState},
 };
+use embassy_wireguard::config::{PublicKey, StaticSecret};
+use embassy_wireguard::{Config, Runner};
 use reqwless::client::{HttpClient, TlsConfig, TlsVerify};
 use reqwless::request::Method;
 
@@ -43,7 +41,7 @@ const ENDPOINT_URL: &str = config::str_from_env_or!(
 
 #[embassy_executor::task]
 async fn net_task(
-    mut runner: embassy_net::Runner<'static, ariel_os_wireguard::Device<'static>>,
+    mut runner: embassy_net::Runner<'static, embassy_wireguard::Device<'static>>,
 ) -> ! {
     info!("Run net_task");
     runner.run().await
@@ -71,25 +69,21 @@ async fn wireguard_task(stack: Stack<'static>, mut runner: Runner<'static>) -> !
 #[ariel_os::task(autostart)]
 async fn main_task() {
     info!("Hello World!");
-    let spawner = asynch::Spawner::for_current_executor().await;
-    info!("Time: {} µs", Instant::now().as_micros());
+    let spawner = unsafe { asynch::Spawner::for_current_executor().await };
 
     // Launch network task
     let stack = net::network_stack().await.unwrap();
     info!("Network stack initialized");
-    info!("Time: {} µs", Instant::now().as_micros());
 
     // Init network device
-    static STATE: StaticCell<ariel_os_wireguard::State<4, 4>> = StaticCell::new();
-    let state = STATE.init(ariel_os_wireguard::State::<4, 4>::new());
-    let (device, runner) = ariel_os_wireguard::new(state);
+    static STATE: StaticCell<embassy_wireguard::State<4, 4>> = StaticCell::new();
+    let state = STATE.init(embassy_wireguard::State::<4, 4>::new());
+    let (device, runner) = embassy_wireguard::new(state);
     info!("Network device initialized");
-    info!("Time: {} µs", Instant::now().as_micros());
 
     // Generate random seed
     let seed = rand_core::RngCore::next_u64(&mut ariel_os::random::crypto_rng());
     info!("Network stack seed: {:#x}", seed);
-    info!("Time: {} µs", Instant::now().as_micros());
 
     // Init network stack
     static RESOURCES: StaticCell<StackResources<3>> = StaticCell::new();
@@ -100,14 +94,11 @@ async fn main_task() {
         seed,
     );
     info!("Network stack initialized");
-    info!("Time: {} µs", Instant::now().as_micros());
 
     spawner.spawn(net_task(net_runner)).unwrap();
     info!("Network task spawned");
-    info!("Time: {} µs", Instant::now().as_micros());
     spawner.spawn(wireguard_task(stack, runner)).unwrap();
     info!("Wireguard task spawned");
-    info!("Time: {} µs", Instant::now().as_micros());
 
     let tcp_client_state =
         TcpClientState::<MAX_CONCURRENT_CONNECTIONS, TCP_BUFFER_SIZE, TCP_BUFFER_SIZE>::new();

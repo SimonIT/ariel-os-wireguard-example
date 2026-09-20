@@ -4,17 +4,31 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ariel-os = { path = "build/imports/ariel-os/src/ariel-os", features = ["net", "random", "hwrng", "csprng", "tcp", "dns"] }
-ariel-os-boards = { path = "build/imports/ariel-os/src/ariel-os-boards" }
-boringtun = { git = "https://github.com/SimonIT/boringtun.git", branch = "no_std", default-features = false, features = ["ariel-os", "alloc", "defmt"] }
-ariel-os-wireguard = { git = "https://github.com/SimonIT/ariel-os-wireguard.git", features = ["defmt"] }
-data-encoding-macro = "0.1.18"
-rand_core = "0.6.4"
-embassy-executor = "0.7.0"
-reqwless = { version = "0.13.0", default-features = true, features = [
-    "embedded-tls",
-    "defmt"
+ariel-os = { path = "build/imports/ariel-os/src/ariel-os", features = [
+  "csprng",
+  "dns",
+  "hwrng",
+  "net",
+  "random",
+  "tcp",
 ] }
+ariel-os-boards = { path = "build/imports/ariel-os/src/ariel-os-boards" }
+data-encoding-macro = "0.1.18"
+der = { version = "0.8", default-features = false, features = ["heapless"] }
+embassy-executor = "0.9.1"
+embassy-wireguard = { path = "../ariel-os-wireguard", features = ["defmt"] }
+rand_core = "0.9.3"
+reqwless = { version = "0.14.0", default-features = true, features = [
+  "defmt",
+  "embedded-tls",
+] }
+
+[patch.crates-io]
+#boringtun
+ip_network = { git = "https://github.com/SimonIT/ip_network.git", branch = "no_std" }
+ip_network_table = { git = "https://github.com/SimonIT/ip_network_table.git", branch = "no_std" }
+ip_network_table-deps-treebitmap = { git = "https://github.com/SimonIT/treebitmap.git", branch = "fix-alloc" }
+ring = { git = "https://github.com/SimonIT/ring.git", branch = "ariel-os" }
 
 [profile.dev]
 incremental = false
@@ -32,39 +46,3 @@ opt-level = "s"
 
 [profile.release.package.esp-wifi]
 opt-level = 3
-
-[patch.crates-io]
-# ariel-os embassy forks
-embassy-embedded-hal = { git = "https://github.com/ariel-os/embassy", branch = "embassy-embedded-hal-v0.3.0+ariel-os" }
-embassy-executor = { git = "https://github.com/ariel-os/embassy", branch = "embassy-executor-v0.7.0+04.04.25+ariel-os" }
-embassy-executor-macros = { git = "https://github.com/ariel-os/embassy", branch = "embassy-executor-macros-v0.6.2+04.04.25" }
-embassy-hal-internal = { git = "https://github.com/ariel-os/embassy", branch = "embassy-hal-internal-v0.2.0+ariel-os" }
-embassy-nrf = { git = "https://github.com/ariel-os/embassy", branch = "embassy-nrf-v0.3.1+ariel-os" }
-embassy-net = { git = "https://github.com/ariel-os/embassy", branch = "embassy-net-v0.6.0+ariel-os" }
-embassy-rp = { git = "https://github.com/ariel-os/embassy", branch = "embassy-rp-v0.4.0+ariel-os" }
-embassy-stm32 = { git = "https://github.com/ariel-os/embassy", branch = "embassy-stm32-v0.2.0+ariel-os" }
-
-# ariel-os esp-hal fork
-esp-alloc = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-esp-hal = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-esp-hal-embassy = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-esp-println = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-esp-wifi = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-esp-storage = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-xtensa-lx-rt = { git = "https://github.com/ariel-os/esp-hal", branch = "v0.23.1+ariel-os-threads" }
-
-# patched to use portable-atomics <https://github.com/seanmonstar/try-lock/pull/11>
-try-lock = { git = "https://github.com/seanmonstar/try-lock", rev = "a1aadfac9840fe23672159c12af7272e44bc684c" }
-
-#boringtun
-ip_network = { git = "https://github.com/SimonIT/ip_network.git", branch = "no_std" }
-ip_network_table = { git = "https://github.com/SimonIT/ip_network_table.git", branch = "no_std" }
-ip_network_table-deps-treebitmap = { git = "https://github.com/SimonIT/treebitmap.git", branch = "fix-alloc" }
-getrandom = { git = "https://github.com/SimonIT/getrandom.git", branch = "ariel-os" }
-ring = { git = "https://github.com/SimonIT/ring.git", branch = "ariel-os" }
-ariel-os-random = { path = "build/imports/ariel-os/src/ariel-os-random" }
-ariel-os-threads = { path = "build/imports/ariel-os/src/ariel-os-threads" }
-embedded-time = { git = "https://github.com/SimonIT/embedded-time.git", branch = "update-defmt" }
-
-[patch."https://github.com/FluenTech/embedded-time.git"]
-embedded-time = { git = "https://github.com/SimonIT/embedded-time.git", branch = "update-defmt" }
